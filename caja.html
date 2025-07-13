@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar Pago</title>
+    <link rel="stylesheet" href="styles5.css">
+</head>
+<body>
+    <div class="form-container">
+        <h1>Registrar Pago</h1>
+
+        <!-- Formulario para seleccionar la pensión y registrar el pago -->
+        <form id="payment-form" method="POST" enctype="multipart/form-data">
+
+            <!-- Seleccionar la pensión -->
+            <label for="pension">Selecciona una pensión:</label>
+            <select id="pension" name="pension" required>
+                <!-- Opciones de pensiones se llenarán con JavaScript -->
+            </select>
+
+            <!-- Método de pago -->
+            <label for="payment-method">Método de Pago:</label>
+            <select id="payment-method" name="payment-method" required>
+                <option value="CASH">Efectivo</option>
+                <option value="CARD">Tarjeta</option>
+                <option value="BANK">Transferencia</option>
+                <option value="YAPE">Yape/Plin</option>
+                <option value="OTHER">Otro</option>
+            </select>
+
+            <!-- Monto a pagar -->
+            <label for="amount">Monto a Pagar:</label>
+            <input type="number" id="amount" name="amount" required placeholder="Ingrese el monto">
+
+            <!-- Subir imagen del recibo -->
+            <label for="receipt-image">Subir Recibo de Pago (opcional):</label>
+            <input type="file" id="receipt-image" name="receipt-image" accept="image/*">
+
+            <!-- Notas sobre el pago -->
+            <label for="notes">Notas:</label>
+            <textarea id="notes" name="notes" placeholder="Escriba alguna nota sobre el pago (opcional)"></textarea>
+
+            <button type="submit">Registrar Pago</button>
+        </form>
+    </div>
+
+    <script src="payment.js"></script>
+</body>
+</html>

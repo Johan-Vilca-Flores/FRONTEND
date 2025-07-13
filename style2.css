@@ -1,0 +1,81 @@
+/* Fondo institucional */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-image: url('2.jpg'); /* Asegúrate que esté en la misma carpeta */
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* Logo del colegio */
+.logo {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 90px;
+  z-index: 10;
+}
+
+/* Contenedor general */
+.content {
+  display: flex;
+  justify-content: flex-end; /* Alineado a la derecha */
+  align-items: center;
+  height: 100vh;
+  padding-right: 5%;
+}
+
+/* Caja del formulario */
+.container {
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+  width: 350px;
+}
+
+/* Título */
+.container h2 {
+  color: #083566;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Estilo de etiquetas */
+label {
+  display: block;
+  margin-top: 15px;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Inputs y select */
+input, select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #083566;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+/* Botón */
+button {
+  margin-top: 20px;
+  width: 100%;
+  background-color: #961302;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s ease;
+}
+
+button:hover {
+  background-color: #083566;
+}

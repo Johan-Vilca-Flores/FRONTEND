@@ -1,0 +1,108 @@
+/* Estilo global */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f7fb;  /* Color de fondo suave */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* Contenedor del formulario */
+.form-container {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    max-width: 600px;
+    margin: 20px;
+}
+
+/* Títulos */
+h1, h2 {
+    color: #083566;  /* Color del título */
+    text-align: center;
+}
+
+/* Estilo del formulario */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Imagen cuadrada debajo del título */
+.image-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.user-image {
+    width: 450px;  /* Ajusta el tamaño de la imagen */
+    height: 450px;  /* Imagen cuadrada */
+    border-radius: 10px;  /* Si prefieres bordes redondeados */
+}
+
+
+/* Estilo para los campos de texto y los botones */
+label {
+    font-size: 16px;
+    color: #333;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="tel"],
+textarea {
+    width: 100%;
+    padding: 12px;
+    margin-top: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="tel"]:focus,
+textarea:focus {
+    border-color: #083566;
+    outline: none;
+}
+
+/* Estilo para el botón */
+button {
+    background-color: #961302;
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 5px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #083566;
+}
+
+/* Estilo para el pie de página */
+footer {
+    text-align: center;
+    margin-top: 20px;
+    color: #777;
+}
+
+footer a {
+    color: #961302;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}

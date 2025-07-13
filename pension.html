@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pensiones</title>
+    <link rel="stylesheet" href="styles4.css">
+</head>
+<body>
+    <div class="form-container">
+        <h1>Seleccionar Inscripción y Pagar</h1>
+
+        <!-- Formulario para seleccionar la inscripción y pagar -->
+        <form id="payment-form">
+            <label for="inscription">Selecciona una inscripción:</label>
+            <select id="inscription" name="inscription" required>
+                <!-- Opciones de inscripciones se llenarán con JavaScript -->
+            </select>
+
+            <label for="amount">Monto a pagar:</label>
+            <input type="number" id="amount" name="amount" required>
+
+            <label for="payment-status">Estado de Pago:</label>
+            <select id="payment-status" name="payment-status" required>
+                <option value="true">Pagado</option>
+                <option value="false">Pendiente</option>
+            </select>
+             <!-- Campo para la fecha de pago -->
+            <label for="payment-date">Fecha de Pago:</label>
+            <input type="date" id="payment-date" name="payment-date" required>
+
+            <button type="submit">Ir a Pagar</button>
+        </form>
+    </div>
+
+    <script src="pension.js"></script>
+</body>
+</html>
