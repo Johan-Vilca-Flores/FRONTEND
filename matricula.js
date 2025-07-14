@@ -1,10 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById("matricula-form");
 
-    if (!form) {
-        console.error('Formulario de matrícula no encontrado');
-        return;
-    }
+   
 
     form.addEventListener("submit", function(event) {
         event.preventDefault();  // Prevenir el comportamiento por defecto del formulario
