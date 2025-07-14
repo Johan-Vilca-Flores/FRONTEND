@@ -15,12 +15,10 @@
         </div>
 
         <form id="matricula-form">
-            <!-- Campo ID (Solo lectura) -->
             <input type="hidden" id="student-id" name="student-id">
 
-            <!-- Datos del Estudiante -->
             <h2>Datos del Estudiante</h2>
-            
+
             <label for="student-dni">DNI:</label>
             <input type="number" id="student-dni" name="student-dni" required><br>
 
@@ -40,9 +38,8 @@
             <input type="tel" id="student-phone" name="student-phone" required><br>
 
             <label for="cod-pag">Código de Pago:</label>
-            <input type="text" id="cod-pag" name="cod-pag"><br>
+            <input type="number" id="cod-pag" name="cod-pag" required><br>
 
-            <!-- Campo de "Status" para indicar si el estudiante está activo -->
             <label for="status">¿Está activo?</label>
             <input type="checkbox" id="status" name="status"><br>
 
