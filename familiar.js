@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(data => {
             console.log("Familiar guardado correctamente:", data);
-            window.location.href = "/caja";  // Cambia la URL si es necesario
+            window.location.href = "/inscripcion.html";  // Cambia la URL si es necesario
         })
         .catch(error => {
             console.error("Error al guardar el familiar:", error);
