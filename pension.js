@@ -1,54 +1,69 @@
-// Función para cargar las inscripciones desde la API
-fetch('https://proyecto01-git-main-johan-vilca-flores-projects.vercel.app/api/inscriptions/')  // URL de la API de inscripciones
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById("pension-form");
+
+    // Verificar si el formulario existe
+    if (!form) {
+        console.error('Formulario de pensión no encontrado');
+        return;
+    }
+
+    // Llamar a la API para obtener las inscripciones registradas
+    fetch('https://proyecto01-git-main-johan-vilca-flores-projects.vercel.app/api/inscriptions/')
     .then(response => response.json())
     .then(data => {
         const inscriptionSelect = document.getElementById('inscription');
 
-        // Llenar el selector de inscripciones con las inscripciones disponibles
-        data.forEach(inscription => {
-            const option = document.createElement('option');
-            option.value = inscription.id;
-            option.textContent = `Estudiante: ${inscription.student.names} - Grado: ${inscription.degree.grade}`;
-            inscriptionSelect.appendChild(option);
-        });
-    })
-    .catch(error => console.error('Error al cargar las inscripciones:', error));
-
-// Manejar el envío del formulario
-document.getElementById('payment-form').addEventListener('submit', function(event) {
-    event.preventDefault(); // Prevenir el comportamiento por defecto del formulario
-
-    const inscriptionId = document.getElementById('inscription').value;
-    const amount = document.getElementById('amount').value;
-    const status = document.getElementById('payment-status').value === "true";  // true para "Pagado", false para "Pendiente"
-    const paymentDate = document.getElementById('payment-date').value;  // Obtener la fecha de pago
-
-    const updatedPensionData = {
-        monto: amount,
-        estado_pago: status,
-        fecha_pago: paymentDate  // Agregar la fecha de pago al cuerpo de la solicitud
-    };
-
-    // Enviar la actualización de la pensión a la API de Django
-    fetch(`https://proyecto01-git-main-johan-vilca-flores-projects.vercel.app/api/pensions/`, {  
-        method: 'POST',  // Usamos POST para crear una nueva pensión
-        headers: {
-            'Content-Type': 'application/json',
-            // Si necesitas autenticación, puedes incluir el token JWT o cookies de sesión
-            // 'Authorization': 'Bearer YOUR_JWT_TOKEN'
-        },
-        body: JSON.stringify(updatedPensionData)
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Pensión registrada:', data);
-        alert('¡Pensión registrada con éxito!');
-
-        // Redirigir a la página de "Caja" después de registrar la pensión
-        window.location.href = "caja.html";  // Aquí puedes cambiar la URL si es necesario
+        // Verificar si la respuesta contiene las inscripciones
+        const inscriptions = data.results;
+        if (Array.isArray(inscriptions)) {
+            inscriptions.forEach(inscription => {
+                const option = document.createElement('option');
+                option.value = inscription.id;  // ID de la inscripción
+                option.textContent = `${inscription.student.names} - ${inscription.degree.grade}`;
+                inscriptionSelect.appendChild(option);
+            });
+        } else {
+            console.error('No se encontró un arreglo de inscripciones en la respuesta:', data);
+        }
     })
     .catch(error => {
-        console.error('Error al registrar la pensión:', error);
-        alert('Hubo un error al realizar el pago.');
+        console.error('Error al cargar las inscripciones:', error);
+    });
+
+    // Manejador de envío de formulario
+    form.addEventListener("submit", function(event) {
+        event.preventDefault();  // Prevenir el comportamiento por defecto del formulario
+
+        // Recolectar los datos del formulario
+        const pensionData = {
+            monto: document.getElementById("monto").value,
+            estado_pago: document.getElementById("estado-pago").checked,  // Si está marcado, estado_pago es true
+            fecha_pago: document.getElementById("fecha-pago").value,
+            inscription: document.getElementById("inscription").value,  // ID de la inscripción
+        };
+
+        console.log("Datos enviados a la API:", pensionData);
+
+        // Enviar los datos a la API de Django
+        fetch('https://proyecto01-git-main-johan-vilca-flores-projects.vercel.app/api/pensions/', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(pensionData)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error en la respuesta de la API');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log("Pensión guardada correctamente:", data);
+            window.location.href = "/caja";  // Cambia la URL si es necesario
+        })
+        .catch(error => {
+            console.error("Error al guardar la pensión:", error);
+        });
     });
 });
