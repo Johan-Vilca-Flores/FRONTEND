@@ -11,15 +11,23 @@ document.addEventListener('DOMContentLoaded', function() {
     fetch('https://proyecto01-git-main-johan-vilca-flores-projects.vercel.app/api/inscriptions/')
     .then(response => response.json())
     .then(data => {
+        console.log(data);  // Verifica qué datos estás recibiendo de la API
         const inscriptionSelect = document.getElementById('inscription');
 
-        // Verificar si la respuesta contiene las inscripciones
-        const inscriptions = data.results;
+        const inscriptions = data.results;  // Obtener las inscripciones
+
         if (Array.isArray(inscriptions)) {
             inscriptions.forEach(inscription => {
+                const student = inscription.student;
+                const degree = inscription.degree;
+
+                // Asegúrate de que student y degree no son nulos
+                const studentName = student ? `${student.names} ${student.father_surname} ${student.mother_surname}` : "Estudiante no disponible";
+                const degreeInfo = degree ? `${degree.grade} (${degree.school_year})` : "Grado no disponible";
+
                 const option = document.createElement('option');
                 option.value = inscription.id;  // ID de la inscripción
-                option.textContent = `${inscription.student.names} - ${inscription.degree.grade}`;
+                option.textContent = `${studentName} - ${degreeInfo}`;
                 inscriptionSelect.appendChild(option);
             });
         } else {
