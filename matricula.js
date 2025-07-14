@@ -12,19 +12,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Recolectar los datos del formulario
         const studentData = {
-            names: document.getElementById("student-name").value,
             dni: document.getElementById("student-dni").value,
+            names: document.getElementById("student-name").value,
+            apell_padre: document.getElementById("apell-padre").value,
+            apell_madre: document.getElementById("apell_madre").value,
+            Email: document.getElementById("Email").value,
             phone: document.getElementById("student-phone").value,
-            address: document.getElementById("student-address").value,
+            cod_pag: document.getElementById("cod-pag").value,
         };
 
-        const familiarData = {
-            name: document.getElementById("familiar-name").value,
-            parentesco: document.getElementById("familiar-parentesco").value,
-            dni: document.getElementById("familiar-dni").value,
-            phone: document.getElementById("familiar-phone").value,
-            address: document.getElementById("familiar-address").value,
-        };
 
         // Enviar los datos a la API de Estudiantes usando fetch (AJAX)
         fetch("https://proyecto01-git-main-johan-vilca-flores-projects.vercel.app/api/students/", {
@@ -37,27 +33,11 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             console.log("Estudiante guardado correctamente:", data);
-
-            // Después de guardar el estudiante, enviar los datos del familiar
-            fetch("https://proyecto01-git-main-johan-vilca-flores-projects.vercel.app/api/familiars/", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(familiarData)
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log("Familiar guardado correctamente:", data);
-                // Redirigir al usuario a la página de inscripción después de guardar
                 window.location.href = "/inscripcion"; // Cambia la URL si es necesario
-            })
-            .catch(error => {
-                console.error("Error al guardar el familiar:", error);
-            });
+            }) 
         })
         .catch(error => {
             console.error("Error al guardar el estudiante:", error);
         });
     });
-});
+
