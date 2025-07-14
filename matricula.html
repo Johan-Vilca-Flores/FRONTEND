@@ -9,15 +9,11 @@
 <body>
     <div class="form-container">
         <h1>Formulario de Matrícula</h1>
-
         <div class="image-container">
             <img src="Matriculas.jpg" alt="Foto del Usuario" class="user-image">
         </div>
 
-        <form id="matricula" method="POST">
-            <!-- Campo ID (Solo lectura) -->
-            <input type="hidden" id="student-id" name="student-id">
-
+        <form id="matricula-form">
             <!-- Datos del Estudiante -->
             <h2>Datos del Estudiante</h2>
             
@@ -26,7 +22,7 @@
 
             <label for="student-name">Nombre del Estudiante:</label>
             <input type="text" id="student-name" name="student-name" required><br>
-            
+
             <label for="apell-padre">Apellido del Padre:</label>
             <input type="text" id="apell-padre" name="apell-padre" required><br>
 
@@ -41,16 +37,6 @@
 
             <label for="cod-pag">Código de Pago:</label>
             <input type="text" id="cod-pag" name="cod-pag"><br>
-
-            <!-- Datos de estado y fecha (Solo lectura) -->
-            <label for="status">Estado:</label>
-            <input type="checkbox" id="status" name="status"><br>
-
-            <label for="created">Fecha de Creación:</label>
-            <input type="text" id="created" name="created" readonly><br>
-
-            <label for="modified">Fecha de Modificación:</label>
-            <input type="text" id="modified" name="modified" readonly><br>
 
             <button type="submit">Registrar Alumno</button>
         </form>
