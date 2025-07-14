@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Obtener el formulario
     const form = document.getElementById("matricula-form");
 
     // Verificar si el formulario existe
@@ -21,13 +20,13 @@ document.addEventListener('DOMContentLoaded', function() {
             email: document.getElementById("Email").value,
             phone: document.getElementById("student-phone").value,
             cod_pag: document.getElementById("cod-pag").value,
+            status: document.getElementById("status").checked,  // Captura el valor del checkbox
         };
 
         // Ver en consola los datos capturados
         console.log("Datos capturados:", studentData);
 
-        // Aquí puedes agregar la lógica para enviar estos datos a la API o guardarlos en el almacenamiento local
-        // Ejemplo con fetch (enviar a una API)
+        // Enviar los datos al servidor
         fetch("https://proyecto01-git-main-johan-vilca-flores-projects.vercel.app/api/students/", {
             method: "POST",
             headers: {
@@ -44,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(data => {
             console.log("Estudiante guardado correctamente:", data);
             // Redirigir a la página de inscripción u otra acción
-            window.location.href = "/inscripcion.html";  // Cambia la URL si es necesario
+            window.location.href = "/inscripcion";  // Cambia la URL si es necesario
         })
         .catch(error => {
             console.error("Error al guardar el estudiante:", error);
