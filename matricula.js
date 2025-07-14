@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById("matricula");
+    // Obtener el formulario
+    const form = document.getElementById("matricula-form");
 
     // Verificar si el formulario existe
     if (!form) {
@@ -7,41 +8,28 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
 
-
-    // Llenar el formulario con los datos del estudiante
-    document.getElementById("student-id").value = studentData.id;
-    document.getElementById("student-dni").value = studentData.dni;
-    document.getElementById("student-name").value = studentData.names;
-    document.getElementById("apell-padre").value = studentData.father_surname;
-    document.getElementById("apell-madre").value = studentData.mother_surname;
-    document.getElementById("Email").value = studentData.email;
-    document.getElementById("student-phone").value = studentData.phone;
-    document.getElementById("cod-pag").value = studentData.Codigo_de_pago;
-    document.getElementById("status").checked = studentData.status;
-    document.getElementById("created").value = studentData.created;
-    document.getElementById("modified").value = studentData.modified;
-
+    // Capturar el evento de envío del formulario
     form.addEventListener("submit", function(event) {
         event.preventDefault();  // Prevenir el comportamiento por defecto del formulario
 
-        // Recolectar los datos del formulario
+        // Recolectar los datos del formulario y guardarlos en un objeto
         const studentData = {
-            id: document.getElementById("student-id").value,
             dni: document.getElementById("student-dni").value,
             names: document.getElementById("student-name").value,
-            father_surname: document.getElementById("apell-padre").value,
-            mother_surname: document.getElementById("apell-madre").value,
+            apell_padre: document.getElementById("apell-padre").value,
+            apell_madre: document.getElementById("apell-madre").value,
             email: document.getElementById("Email").value,
             phone: document.getElementById("student-phone").value,
-            status: document.getElementById("status").checked,
-            created: document.getElementById("created").value,
-            modified: document.getElementById("modified").value,
-            Codigo_de_pago: document.getElementById("cod-pag").value
+            cod_pag: document.getElementById("cod-pag").value,
         };
 
-        // Enviar los datos a la API de Estudiantes usando fetch (AJAX)
+        // Ver en consola los datos capturados
+        console.log("Datos capturados:", studentData);
+
+        // Aquí puedes agregar la lógica para enviar estos datos a la API o guardarlos en el almacenamiento local
+        // Ejemplo con fetch (enviar a una API)
         fetch("https://proyecto01-git-main-johan-vilca-flores-projects.vercel.app/api/students/", {
-            method: "POST",  // Cambiar a "PUT" si estás actualizando el estudiante
+            method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
@@ -55,7 +43,8 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(data => {
             console.log("Estudiante guardado correctamente:", data);
-            window.location.href = "/inscripcion";  // Cambia la URL si es necesario
+            // Redirigir a la página de inscripción u otra acción
+            window.location.href = "/inscripcion.html";  // Cambia la URL si es necesario
         })
         .catch(error => {
             console.error("Error al guardar el estudiante:", error);
