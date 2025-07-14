@@ -9,11 +9,15 @@
 <body>
     <div class="form-container">
         <h1>Formulario de Matrícula</h1>
+
         <div class="image-container">
             <img src="Matriculas.jpg" alt="Foto del Usuario" class="user-image">
         </div>
 
         <form id="matricula-form">
+            <!-- Campo ID (Solo lectura) -->
+            <input type="hidden" id="student-id" name="student-id">
+
             <!-- Datos del Estudiante -->
             <h2>Datos del Estudiante</h2>
             
@@ -37,6 +41,10 @@
 
             <label for="cod-pag">Código de Pago:</label>
             <input type="text" id="cod-pag" name="cod-pag"><br>
+
+            <!-- Campo de "Status" para indicar si el estudiante está activo -->
+            <label for="status">¿Está activo?</label>
+            <input type="checkbox" id="status" name="status"><br>
 
             <button type="submit">Registrar Alumno</button>
         </form>
