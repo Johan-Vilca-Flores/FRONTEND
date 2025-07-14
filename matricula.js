@@ -1,30 +1,56 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inscripción de Estudiantes</title>
-    <link rel="stylesheet" href="styles3.css">
-</head>
-<body>
-    <div class="form-container">
-        <h1>Formulario de Inscripción</h1>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById("matricula-form");
 
-        <!-- Formulario para inscripción -->
-        <form id="inscription-form">
-            <label for="degree">Selecciona un grado:</label>
-            <select id="degree" name="degree" required>
-                <!-- Opciones de grados se llenarán con JavaScript -->
-            </select>
+    // Verificar si el formulario existe
+    if (!form) {
+        console.error('Formulario de matrícula no encontrado');
+        return;
+    }
 
-            <label for="student">Selecciona un estudiante:</label>
-            <select id="student" name="student" required>
-                <!-- Opciones de grados se llenarán con JavaScript -->
-           </select>
-            <button type="submit">Inscribir Estudiante</button>
-        </form>
-    </div>
+    // Capturar el evento de envío del formulario
+    form.addEventListener("submit", function(event) {
+        event.preventDefault();  // Prevenir el comportamiento por defecto del formulario
 
-    <script src="matricula.js"></script>
-</body>
-</html>
+        // Recolectar los datos del formulario y guardarlos en un objeto
+        const studentData = {
+            dni: Number.getElementById("student-dni").value,
+            names: document.getElementById("student-name").value,
+            apell_padre: document.getElementById("apell-padre").value,
+            apell_madre: document.getElementById("apell-madre").value,
+            email: document.getElementById("Email").value,
+            phone: document.getElementById("student-phone").value,
+            cod_pag: Number.getElementById("cod-pag").value,
+            status: document.getElementById("status").checked,  // Captura el valor del checkbox
+        };
+ // Validación para asegurarse de que los campos requeridos están completos
+        if (!studentData.dni || !studentData.names || !studentData.email || !studentData.phone) {
+            alert("Por favor, completa todos los campos obligatorios.");
+            return;
+        }
+        // Ver en consola los datos capturados
+        console.log("Datos capturados:", studentData);
+
+        // Enviar los datos al servidor
+        fetch("https://proyecto01-git-main-johan-vilca-flores-projects.vercel.app/api/students/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(studentData)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error en la respuesta de la API');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log("Estudiante guardado correctamente:", data);
+            // Redirigir a la página de inscripción u otra acción
+            window.location.href = "/inscripcion";  // Cambia la URL si es necesario
+        })
+        .catch(error => {
+            console.error("Error al guardar el estudiante:", error);
+        });
+    });
+});
