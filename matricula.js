@@ -1,32 +1,26 @@
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById("matricula-form");
 
-    // Verificar si el formulario existe
     if (!form) {
         console.error('Formulario de matrícula no encontrado');
         return;
     }
 
-    // Capturar el evento de envío del formulario
     form.addEventListener("submit", function(event) {
         event.preventDefault();  // Prevenir el comportamiento por defecto del formulario
 
         // Recolectar los datos del formulario y guardarlos en un objeto
         const studentData = {
-            dni: document.getElementById("student-dni").value,
+            dni: parseInt(document.getElementById("student-dni").value, 10), // Convertir a número
             names: document.getElementById("student-name").value,
             apell_padre: document.getElementById("apell-padre").value,
             apell_madre: document.getElementById("apell-madre").value,
             email: document.getElementById("Email").value,
-            phone: document.getElementById("student-phone").value,
-            cod_pag: document.getElementById("cod-pag").value,
+            phone: parseInt(document.getElementById("student-phone").value, 10), // Convertir a número
+            cod_pag: parseInt(document.getElementById("cod-pag").value, 10), // Convertir a número
             status: document.getElementById("status").checked,  // Captura el valor del checkbox
         };
- // Validación para asegurarse de que los campos requeridos están completos
-        if (!studentData.dni || !studentData.names || !studentData.email || !studentData.phone) {
-            alert("Por favor, completa todos los campos obligatorios.");
-            return;
-        }
+
         // Ver en consola los datos capturados
         console.log("Datos capturados:", studentData);
 
@@ -46,7 +40,6 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(data => {
             console.log("Estudiante guardado correctamente:", data);
-            // Redirigir a la página de inscripción u otra acción
             window.location.href = "/inscripcion";  // Cambia la URL si es necesario
         })
         .catch(error => {
