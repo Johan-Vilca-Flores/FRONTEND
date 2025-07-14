@@ -3,28 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inscripción de Estudiantes</title>
-    <link rel="stylesheet" href="styles3.css">
+    <title>Formulario de Inscripción</title>
+    <link rel="stylesheet" href="styles1.css">
 </head>
 <body>
     <div class="form-container">
         <h1>Formulario de Inscripción</h1>
 
-        <!-- Formulario para inscripción -->
-        <form id="inscription-form">
-            <label for="degree">Selecciona un grado:</label>
-            <select id="degree" name="degree" required>
-                <!-- Opciones de grados se llenarán con JavaScript -->
-            </select>
-
-            <label for="student">Selecciona un estudiante:</label>
+        <form id="inscripcion-form">
+            <!-- Selección de Estudiante -->
+            <label for="student">Seleccionar Estudiante:</label>
             <select id="student" name="student" required>
-                <!-- Opciones de grados se llenarán con JavaScript -->
-           </select>
-            <button type="submit">Inscribir Estudiante</button>
+                <!-- Los estudiantes se llenarán aquí -->
+            </select><br>
+
+            <!-- Selección de Grado -->
+            <label for="degree">Seleccionar Grado:</label>
+            <select id="degree" name="degree" required>
+                <!-- Los grados se llenarán aquí -->
+            </select><br>
+
+            <!-- Botón de Envío -->
+            <button type="submit">Registrar Inscripción</button>
         </form>
     </div>
 
-    <script src="matricula.js"></script>
+    <script src="inscripcion.js" defer></script>
 </body>
 </html>
