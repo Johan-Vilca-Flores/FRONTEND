@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Familiar</title>
+    <link rel="stylesheet" href="styles1.css">
+</head>
+<body>
+    <div class="form-container">
+        <h1>Formulario de Familiar</h1>
+
+        <form id="familiar-form" method="POST">
+            <!-- Selección de Estudiante -->
+            <label for="student">Seleccionar Estudiante:</label>
+            <select id="student" name="student" required></select><br>
+
+            <!-- Datos del Familiar -->
+            <label for="familiar-name">Nombre del Familiar:</label>
+            <input type="text" id="familiar-name" name="nombre" required><br>
+
+            <label for="familiar-parentesco">Parentesco:</label>
+            <input type="text" id="familiar-parentesco" name="parentesco" required><br>
+
+            <label for="familiar-dni">DNI:</label>
+            <input type="text" id="familiar-dni" name="dni" required><br>
+
+            <label for="familiar-phone">Teléfono:</label>
+            <input type="tel" id="familiar-phone" name="telefono" required><br>
+
+            <label for="familiar-address">Dirección:</label>
+            <textarea id="familiar-address" name="direccion" required></textarea><br>
+
+            <!-- Botón de Envío -->
+            <button type="submit">Registrar Familiar</button>
+        </form>
+    </div>
+
+    <script src="familiar.js" defer></script>
+</body>
+</html>
