@@ -15,12 +15,11 @@ document.addEventListener('DOMContentLoaded', function() {
             dni: document.getElementById("student-dni").value,
             names: document.getElementById("student-name").value,
             apell_padre: document.getElementById("apell-padre").value,
-            apell_madre: document.getElementById("apell_madre").value,
+            apell_madre: document.getElementById("apell-madre").value,
             Email: document.getElementById("Email").value,
             phone: document.getElementById("student-phone").value,
             cod_pag: document.getElementById("cod-pag").value,
         };
-
 
         // Enviar los datos a la API de Estudiantes usando fetch (AJAX)
         fetch("https://proyecto01-git-main-johan-vilca-flores-projects.vercel.app/api/students/", {
@@ -30,14 +29,18 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             body: JSON.stringify(studentData)
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error en la respuesta de la API');
+            }
+            return response.json();
+        })
         .then(data => {
             console.log("Estudiante guardado correctamente:", data);
-                window.location.href = "/inscripcion"; // Cambia la URL si es necesario
-            }) 
+            window.location.href = "/inscripcion.html"; // Cambia la URL si es necesario
         })
         .catch(error => {
             console.error("Error al guardar el estudiante:", error);
         });
     });
-
+});
