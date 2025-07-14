@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(data => {
             console.log("Estudiante guardado correctamente:", data);
-            window.location.href = "/inscripcion";  // Cambia la URL si es necesario
+            window.location.href = "/familiar.html";  // Cambia la URL si es necesario
         })
         .catch(error => {
             console.error("Error al guardar el estudiante:", error);
