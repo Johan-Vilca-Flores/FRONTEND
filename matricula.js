@@ -11,13 +11,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Recolectar los datos del formulario y asegurarse de que los valores sean correctos
         const studentData = {
-            dni: parseInt(document.getElementById("student-dni").value, 10),  // Asegurarse de que sea un número
-            names: document.getElementById("student-name").value,
-            apell_padre: document.getElementById("apell-padre").value,
-            apell_madre: document.getElementById("apell-madre").value,
-            email: document.getElementById("Email").value,
-            phone: document.getElementById("student-phone").value,
-            cod_pag: parseInt(document.getElementById("cod-pag").value, 10), // Asegurarse de que sea un número
+            dni: parseInt(document.getElementById("dni").value, 10),  // Asegurarse de que sea un número
+            names: document.getElementById("name").value,
+            apell_padre: document.getElementById("father_surname").value,
+            apell_madre: document.getElementById("mother_surname").value,
+            email: document.getElementById("email").value,
+            phone: document.getElementById("phone").value,
+            cod_pag: parseInt(document.getElementById("Codigo_de_pago").value, 10), // Asegurarse de que sea un número
             status: document.getElementById("status").checked,  // Captura el valor del checkbox
         };
 
