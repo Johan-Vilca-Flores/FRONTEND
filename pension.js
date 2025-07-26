@@ -1,23 +1,27 @@
+console.log('pension.js cargado');
+
 document.addEventListener('DOMContentLoaded', () => {
+  console.log('DOMContentLoaded OK');
+
   const inscriptionSelect = document.getElementById('inscription');
   const form              = document.getElementById('pension-form');
   const messageDiv        = document.getElementById('message');
 
-  // 1. Cargar inscripciones
-  fetch('https://proyecto01-git-main-johan-vilca-flores-projects.vercel.app/api/inscriptions/')
+  fetch('https://.../api/inscriptions/')
     .then(res => res.ok ? res.json() : Promise.reject(res))
     .then(data => {
       console.log('inscripciones:', data.results);
-      // Limpiar opción de "cargando..."
       inscriptionSelect.innerHTML = '<option value="">--Selecciona una inscripción--</option>';
       data.results.forEach(ins => {
+        const { student = {}, degree = {} } = ins;
+        const nombre   = student.first_name  || student.names  || 'Sin nombre';
+        const apellido = student.last_name   || student.father_surname || '';
+        const grado    = degree.name        || degree.grade || 'Grado des.';
+        const año      = degree.school_year || degree.year  || 'N/D';
+
         const opt = document.createElement('option');
-        const student = ins.student;
-        const degree  = ins.degree;
-        // Ajusta estas propiedades según tu serializer real
         opt.value = ins.id;
-        opt.textContent = 
-          `${student.names} ${student.father_surname} — ${degree.grade} (Año ${degree.school_year})`;
+        opt.textContent = `${nombre} ${apellido}`.trim() + ` — ${grado} (Año ${año})`;
         inscriptionSelect.appendChild(opt);
       });
     })
@@ -26,7 +30,6 @@ document.addEventListener('DOMContentLoaded', () => {
       inscriptionSelect.innerHTML = '<option value="">Error cargando</option>';
     });
 
-  // 2. Manejar el envío del formulario
   form.addEventListener('submit', e => {
     e.preventDefault();
     messageDiv.textContent = '';
@@ -38,22 +41,18 @@ document.addEventListener('DOMContentLoaded', () => {
       fecha_pago:  document.getElementById('fecha-pago').value
     };
 
-    // Validación mínima
     if (!payload.inscription) {
       messageDiv.textContent = 'Debes seleccionar una inscripción.';
       messageDiv.style.color = 'red';
       return;
     }
 
-    fetch('https://proyecto01-git-main-johan-vilca-flores-projects.vercel.app/api/pensions/', {
+    fetch('https://.../api/pensions/', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     })
-    .then(res => {
-      if (res.ok) return res.json();
-      return res.json().then(errData => Promise.reject(errData));
-    })
+    .then(res => res.ok ? res.json() : res.json().then(e=>Promise.reject(e)))
     .then(() => {
       messageDiv.textContent = 'Pensión registrada con éxito.';
       messageDiv.style.color = 'green';
