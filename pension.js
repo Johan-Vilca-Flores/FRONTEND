@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const form              = document.getElementById('pension-form');
   const messageDiv        = document.getElementById('message');
 
-  fetch('https://.../api/inscriptions/')
+  fetch('https://proyecto01-git-main-johan-vilca-flores-projects.vercel.app/api/inscriptions/')
     .then(res => res.ok ? res.json() : Promise.reject(res))
     .then(data => {
       console.log('inscripciones:', data.results);
@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    fetch('https://.../api/pensions/', {
+    fetch('https://proyecto01-git-main-johan-vilca-flores-projects.vercel.app/api/pensions/', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
