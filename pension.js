@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
   fetch('https://proyecto01-git-main-johan-vilca-flores-projects.vercel.app/api/inscriptions/')
     .then(res => res.ok ? res.json() : Promise.reject(res))
     .then(data => {
+      console.log('inscripciones:', data.results);
       // Limpiar opción de "cargando..."
       inscriptionSelect.innerHTML = '<option value="">--Selecciona una inscripción--</option>';
       data.results.forEach(ins => {
