@@ -1,61 +1,67 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // 1. Referencias al DOM
-  const form       = document.getElementById('pension-form');
-  const selInscrip = document.getElementById('inscription');
-  const chkEstado  = document.getElementById('status');
-  const inpFecha   = document.getElementById('payment_date');
+  const degreeSelect  = document.getElementById('degree-select');
+  const studentSelect = document.getElementById('student-select');
+  const form          = document.getElementById('inscription-form');
+  const messageDiv    = document.getElementById('message');
 
-  if (!form || !selInscrip) {
-    console.error('Formulario de Pensión o <select> no encontrados');
-    return;
-  }
-
-  // 2. Cargar inscripciones
-  fetch('https://proyecto01-git-main-johan-vilca-flores-projects.vercel.app/api/inscriptions/')
-    .then(res => res.json())
+  // 1. Cargar grados
+  fetch('https://proyecto01-git-main-johan-vilca-flores-projects.vercel.app/api/degrees/')
+    .then(res => res.ok ? res.json() : Promise.reject(res))
     .then(data => {
-      // DRF paginado: data.results, o bien un array plano en data
-      const inscripciones = Array.isArray(data.results) ? data.results : data;
-
-      inscripciones.forEach(ins => {
-        const { id, student, degree } = ins;
-        const option = document.createElement('option');
-        option.value = id;
-        // Ajusta aquí los nombres de campo exactos que devuelve tu API:
-        // p.ej. student.nombres, student.apellido_paterno, etc.
-        option.textContent = 
-          `${student.nombres} ${student.apellido_paterno} ${student.apellido_materno} — ` +
-          `${degree.grado} (${degree.año_escolar})`;
-
-        selInscrip.appendChild(option);
+      data.results.forEach(degree => {
+        const opt = document.createElement('option');
+        opt.value = degree.id;
+        opt.textContent = `${degree.grade} – Año ${degree.school_year}`;
+        degreeSelect.appendChild(opt);
       });
     })
-    .catch(err => console.error('Error cargando inscripciones:', err));
+    .catch(err => console.error('Error fetching degrees:', err));
 
-  // 3. Envío del formulario
+  // 2. Cargar estudiantes
+  fetch('https://proyecto01-git-main-johan-vilca-flores-projects.vercel.app/api/students/')
+    .then(res => res.ok ? res.json() : Promise.reject(res))
+    .then(data => {
+      data.results.forEach(student => {
+        const opt = document.createElement('option');
+        opt.value = student.id;
+        opt.textContent = `${student.names} ${student.father_surname} ${student.mother_surname || ''}`;
+        studentSelect.appendChild(opt);
+      });
+    })
+    .catch(err => console.error('Error fetching students:', err));
+
+  // 3. Enviar inscripción
   form.addEventListener('submit', e => {
     e.preventDefault();
+    const degreeId  = degreeSelect.value;
+    const studentId = studentSelect.value;
 
-    const payload = {
-      inscription:  selInscrip.value,
-      status:       chkEstado.checked,
-      payment_date: inpFecha.value
-    };
+    if (!degreeId || !studentId) {
+      messageDiv.textContent = 'Por favor, selecciona grado y estudiante.';
+      messageDiv.style.color = 'red';
+      return;
+    }
 
-    fetch('https://proyecto01-git-main-johan-vilca-flores-projects.vercel.app/api/pensions/', {
-      method:  'POST',
+    const payload = { degree: degreeId, student: studentId };
+
+    fetch('https://proyecto01-git-main-johan-vilca-flores-projects.vercel.app/api/inscriptions/', {
+      method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify(payload)
+      body: JSON.stringify(payload)
     })
     .then(res => {
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      return res.json();
+      if (res.ok) return res.json();
+      return res.json().then(errData => Promise.reject(errData));
     })
-    .then(data => {
-      console.log('Pensión registrada:', data);
-      // redirige o notifica al usuario:
-      window.location.href = '/pension.html';
+    .then(() => {
+      messageDiv.textContent = 'Inscripción registrada con éxito.';
+      messageDiv.style.color = 'green';
+      form.reset();
     })
-    .catch(err => console.error('Error al registrar pensión:', err));
+    .catch(err => {
+      console.error('Error al registrar inscripción:', err);
+      messageDiv.textContent = 'Error al registrar inscripción. Revisa la consola.';
+      messageDiv.style.color = 'red';
+    });
   });
 });
