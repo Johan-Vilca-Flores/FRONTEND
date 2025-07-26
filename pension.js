@@ -1,29 +1,36 @@
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById("pension-form");
 
-    // Verificar si el formulario existe
     if (!form) {
         console.error('Formulario de pensión no encontrado');
         return;
     }
 
-    // Llamar a la API para obtener las inscripciones registradas
+    // Cargar inscripciones desde la API
     fetch('https://proyecto01-git-main-johan-vilca-flores-projects.vercel.app/api/inscriptions/')
     .then(response => response.json())
     .then(data => {
         const inscriptionSelect = document.getElementById('inscription');
-
-        // Verificar si la respuesta contiene las inscripciones
         const inscriptions = data.results;
+
         if (Array.isArray(inscriptions)) {
             inscriptions.forEach(inscription => {
                 const student = inscription.student || {};
                 const degree = inscription.degree || {};
 
-                const studentName = `${student.names || ''} ${student.father_surname || ''} ${student.mother_surname || ''}`.trim();
-                const degreeInfo = `${degree.grade || ''} (${degree.school_year || ''})`.trim();
+                // Obtener partes del nombre
+                const nombres = student.names || '';
+                const apellidoPaterno = student.father_surname || '';
+                const apellidoMaterno = student.mother_surname || '';
 
-                // Texto final del option
+                // Obtener datos de grado
+                const grado = degree.grade || '';
+                const año = degree.school_year || '';
+
+                // Formatear texto: Juan Pérez García - 5to (2025)
+                const studentName = `${nombres} ${apellidoPaterno} ${apellidoMaterno}`.trim();
+                const degreeInfo = grado && año ? `${grado} (${año})` : '';
+
                 const optionText = studentName && degreeInfo
                     ? `${studentName} - ${degreeInfo}`
                     : `Inscripción #${inscription.id}`;
@@ -34,18 +41,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 inscriptionSelect.appendChild(option);
             });
         } else {
-            console.error('No se encontró un arreglo de inscripciones en la respuesta:', data);
+            console.error('La respuesta de inscripciones no es un arreglo:', data);
         }
     })
     .catch(error => {
         console.error('Error al cargar las inscripciones:', error);
     });
 
-    // Manejador de envío de formulario
+    // Enviar el formulario de pensión
     form.addEventListener("submit", function(event) {
-        event.preventDefault();  // Prevenir el comportamiento por defecto del formulario
+        event.preventDefault();
 
-        // Recolectar los datos del formulario
         const pensionData = {
             monto: document.getElementById("monto").value,
             estado_pago: document.getElementById("estado-pago").checked,
@@ -55,7 +61,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         console.log("Datos enviados a la API:", pensionData);
 
-        // Enviar los datos a la API de Django
         fetch('https://proyecto01-git-main-johan-vilca-flores-projects.vercel.app/api/pensions/', {
             method: "POST",
             headers: {
@@ -71,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(data => {
             console.log("Pensión guardada correctamente:", data);
-            window.location.href = "/caja";  // Cambia esta URL si es necesario
+            window.location.href = "/caja";  // redirige luego de guardar
         })
         .catch(error => {
             console.error("Error al guardar la pensión:", error);
