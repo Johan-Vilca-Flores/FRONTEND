@@ -57,10 +57,19 @@ document.addEventListener('DOMContentLoaded', function() {
     form.addEventListener("submit", function(event) {
         event.preventDefault();  // Prevenir el comportamiento por defecto del formulario
 
-        // Recolectar los datos del formulario
+        // Obtener los valores seleccionados
+        const studentId = document.getElementById("student").value;
+        const degreeId = document.getElementById("degree").value;
+
+        // Verificar si los valores de student y degree son válidos
+        if (!studentId || !degreeId) {
+            alert("Por favor, selecciona un estudiante y un grado.");
+            return;
+        }
+
         const inscriptionData = {
-            student: document.getElementById("student").value,  // ID del estudiante
-            degree: document.getElementById("degree").value,  // ID del grado
+            student: studentId,  // ID del estudiante
+            degree: degreeId,    // ID del grado
         };
 
         console.log("Datos enviados a la API:", inscriptionData);
@@ -85,6 +94,7 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .catch(error => {
             console.error("Error al guardar la inscripción:", error);
+            alert("Hubo un error al guardar la inscripción.");
         });
     });
 });
