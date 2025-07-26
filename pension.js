@@ -17,16 +17,20 @@ document.addEventListener('DOMContentLoaded', function() {
         const inscriptions = data.results;
         if (Array.isArray(inscriptions)) {
             inscriptions.forEach(inscription => {
-                const student = inscription.student;
-                const degree = inscription.degree;
+                const student = inscription.student || {};
+                const degree = inscription.degree || {};
 
-                // Asegúrate de que student y degree no sean nulos
-                const studentName = student ? `${student.names} ${student.father_surname} ${student.mother_surname}` : "Estudiante no disponible";
-                const degreeInfo = degree ? `${degree.grade} (${degree.school_year})` : "Grado no disponible";
+                const studentName = `${student.names || ''} ${student.father_surname || ''} ${student.mother_surname || ''}`.trim();
+                const degreeInfo = `${degree.grade || ''} (${degree.school_year || ''})`.trim();
+
+                // Texto final del option
+                const optionText = studentName && degreeInfo
+                    ? `${studentName} - ${degreeInfo}`
+                    : `Inscripción #${inscription.id}`;
 
                 const option = document.createElement('option');
-                option.value = inscription.id;  // ID de la inscripción
-                option.textContent = `${studentName} - ${degreeInfo}`;
+                option.value = inscription.id;
+                option.textContent = optionText;
                 inscriptionSelect.appendChild(option);
             });
         } else {
@@ -44,9 +48,9 @@ document.addEventListener('DOMContentLoaded', function() {
         // Recolectar los datos del formulario
         const pensionData = {
             monto: document.getElementById("monto").value,
-            estado_pago: document.getElementById("estado-pago").checked,  // Si está marcado, estado_pago es true
+            estado_pago: document.getElementById("estado-pago").checked,
             fecha_pago: document.getElementById("fecha-pago").value,
-            inscription: document.getElementById("inscription").value,  // ID de la inscripción
+            inscription: document.getElementById("inscription").value,
         };
 
         console.log("Datos enviados a la API:", pensionData);
@@ -67,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(data => {
             console.log("Pensión guardada correctamente:", data);
-            window.location.href = "/caja";  // Cambia la URL si es necesario
+            window.location.href = "/caja";  // Cambia esta URL si es necesario
         })
         .catch(error => {
             console.error("Error al guardar la pensión:", error);
