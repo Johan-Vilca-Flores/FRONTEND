@@ -1,85 +1,61 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById("pension-form");
+document.addEventListener('DOMContentLoaded', () => {
+  // 1. Referencias al DOM
+  const form       = document.getElementById('pension-form');
+  const selInscrip = document.getElementById('inscription');
+  const chkEstado  = document.getElementById('status');
+  const inpFecha   = document.getElementById('payment_date');
 
-    if (!form) {
-        console.error('Formulario de pensión no encontrado');
-        return;
-    }
+  if (!form || !selInscrip) {
+    console.error('Formulario de Pensión o <select> no encontrados');
+    return;
+  }
 
-    // Cargar inscripciones desde la API
-    fetch('https://proyecto01-git-main-johan-vilca-flores-projects.vercel.app/api/inscriptions/')
-    .then(response => response.json())
+  // 2. Cargar inscripciones
+  fetch('https://proyecto01-git-main-johan-vilca-flores-projects.vercel.app/api/inscriptions/')
+    .then(res => res.json())
     .then(data => {
-        const inscriptionSelect = document.getElementById('inscription');
-        const inscriptions = data.results;
+      // DRF paginado: data.results, o bien un array plano en data
+      const inscripciones = Array.isArray(data.results) ? data.results : data;
 
-        if (Array.isArray(inscriptions)) {
-            inscriptions.forEach(inscription => {
-                const student = inscription.student || {};
-                const degree = inscription.degree || {};
+      inscripciones.forEach(ins => {
+        const { id, student, degree } = ins;
+        const option = document.createElement('option');
+        option.value = id;
+        // Ajusta aquí los nombres de campo exactos que devuelve tu API:
+        // p.ej. student.nombres, student.apellido_paterno, etc.
+        option.textContent = 
+          `${student.nombres} ${student.apellido_paterno} ${student.apellido_materno} — ` +
+          `${degree.grado} (${degree.año_escolar})`;
 
-                // Obtener partes del nombre
-                const nombres = student.names || '';
-                const apellidoPaterno = student.father_surname || '';
-                const apellidoMaterno = student.mother_surname || '';
-
-                // Obtener datos de grado
-                const grado = degree.grade || '';
-                const año = degree.school_year || '';
-
-                // Formatear texto: Juan Pérez García - 5to (2025)
-                const studentName = `${nombres} ${apellidoPaterno} ${apellidoMaterno}`.trim();
-                const degreeInfo = grado && año ? `${grado} (${año})` : '';
-
-                const optionText = studentName && degreeInfo
-                    ? `${studentName} - ${degreeInfo}`
-                    : `Inscripción #${inscription.id}`;
-
-                const option = document.createElement('option');
-                option.value = inscription.id;
-                option.textContent = optionText;
-                inscriptionSelect.appendChild(option);
-            });
-        } else {
-            console.error('La respuesta de inscripciones no es un arreglo:', data);
-        }
+        selInscrip.appendChild(option);
+      });
     })
-    .catch(error => {
-        console.error('Error al cargar las inscripciones:', error);
-    });
+    .catch(err => console.error('Error cargando inscripciones:', err));
 
-    // Enviar el formulario de pensión
-    form.addEventListener("submit", function(event) {
-        event.preventDefault();
+  // 3. Envío del formulario
+  form.addEventListener('submit', e => {
+    e.preventDefault();
 
-        const pensionData = {
-            monto: document.getElementById("monto").value,
-            estado_pago: document.getElementById("estado-pago").checked,
-            fecha_pago: document.getElementById("fecha-pago").value,
-            inscription: document.getElementById("inscription").value,
-        };
+    const payload = {
+      inscription:  selInscrip.value,
+      status:       chkEstado.checked,
+      payment_date: inpFecha.value
+    };
 
-        console.log("Datos enviados a la API:", pensionData);
-
-        fetch('https://proyecto01-git-main-johan-vilca-flores-projects.vercel.app/api/pensions/', {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(pensionData)
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Error en la respuesta de la API');
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log("Pensión guardada correctamente:", data);
-            window.location.href = "/caja";  // redirige luego de guardar
-        })
-        .catch(error => {
-            console.error("Error al guardar la pensión:", error);
-        });
-    });
+    fetch('https://proyecto01-git-main-johan-vilca-flores-projects.vercel.app/api/pensions/', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(payload)
+    })
+    .then(res => {
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      return res.json();
+    })
+    .then(data => {
+      console.log('Pensión registrada:', data);
+      // redirige o notifica al usuario:
+      window.location.href = '/pension.html';
+    })
+    .catch(err => console.error('Error al registrar pensión:', err));
+  });
 });
