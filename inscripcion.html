@@ -1,35 +1,32 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulario de Inscripción</title>
-    <link rel="stylesheet" href="styles1.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Formulario de Inscripción</title>
+  <link rel="stylesheet" href="styles1.css" />
+  <script src="inscripcion.js" defer></script>
 </head>
 <body>
-    <div class="form-container">
-        <h1>Formulario de Inscripción</h1>
+  <div class="container">
+    <h1>Inscripción</h1>
 
-        <form id="inscripcion-form">
-            <!-- Selección de Estudiante -->
-            <label for="student">Seleccionar Estudiante:</label>
-            <select id="student" name="student" required>
-                <!-- Los estudiantes se llenarán aquí -->
-            </select><br>
+    <form id="inscripcion-form">
+      <label for="student">Estudiante:</label>
+      <select id="student" required>
+        <option value="">– Cargando… –</option>
+      </select>
 
-            <!-- Selección de Grado -->
-            <label for="degree">Seleccionar Grado:</label>
-            <select id="degree" name="degree" required>
-                <!-- Los grados se llenarán aquí -->
-            </select><br>
+      <label for="degree">Grado:</label>
+      <select id="degree" required>
+        <option value="">– Cargando… –</option>
+      </select>
 
-            <!-- Botón de Envío -->
-            <button type="submit">Registrar Inscripción</button>
-        </form>
-        <div id="message"></div>
-    </div>
-    
+      <button type="submit">Inscribir</button>
+    </form>
 
-    <script src="inscripcion.js" defer></script>
+    <!-- ↓↓↓ ESTE DIV ES OBLIGATORIO ↓↓↓ -->
+    <div id="message"></div>
+  </div>
 </body>
 </html>
