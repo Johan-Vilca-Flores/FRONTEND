@@ -82,6 +82,10 @@ document.addEventListener('DOMContentLoaded', () => {
       messageDiv.textContent = 'Pensión registrada con éxito.';
       messageDiv.style.color   = 'green';
       form.reset();
+      
+      setTimeout(() => {
+        window.location.href = '/caja.html';
+      }, 1000);
 
     } catch(err) {
       console.error('Error al registrar la pensión:', err);
