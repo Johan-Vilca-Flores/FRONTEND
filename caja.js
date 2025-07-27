@@ -75,6 +75,9 @@ document.addEventListener('DOMContentLoaded', () => {
       messageDiv.textContent = 'Pago registrado con éxito.';
       messageDiv.style.color = 'green';
       form.reset();
+      setTimeout(() => {
+        window.location.href = '/thanks.html';
+      }, 1000);
 
     } catch (err) {
       console.error('Error al registrar pago:', err);
