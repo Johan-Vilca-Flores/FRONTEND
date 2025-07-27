@@ -1,39 +1,63 @@
+// caja.js
+
 console.log('caja.js cargado');
 
 document.addEventListener('DOMContentLoaded', () => {
   console.log('DOMContentLoaded OK');
 
-  const pensionSelect   = document.getElementById('pension');
-  const form            = document.getElementById('payment-form');
-  const messageDiv      = document.getElementById('message');
+  const pensionSelect = document.getElementById('pension');
+  const form          = document.getElementById('payment-form');
+  const messageDiv    = document.getElementById('message');
 
   if (!messageDiv) {
     console.error('Falta <div id="message"> en el HTML');
     return;
   }
 
-  // 1. Cargar pensiones (solo las registradas)
-  fetch('https://proyecto01-git-main-johan-vilca-flores-projects.vercel.app/api/pensions/')
-    .then(res => res.ok ? res.json() : Promise.reject(res))
-    .then(data => {
-      pensionSelect.innerHTML = '<option value="">--Selecciona una pensión--</option>';
-      data.results.forEach(p => {
-        const opt = document.createElement('option');
-        opt.value = p.id;
-        // Mostrar estudiante y monto, por ejemplo:
-        const estudiante = p.inscription && p.inscription.student
-                          ? `${p.inscription.student.first_name || p.inscription.student.names} ${p.inscription.student.last_name || p.inscription.student.father_surname}`
-                          : `Pensión #${p.id}`;
-        opt.textContent = `${estudiante} — S/ ${p.monto}`;
-        pensionSelect.appendChild(opt);
-      });
-    })
-    .catch(err => {
-      console.error('Error al cargar pensiones:', err);
-      pensionSelect.innerHTML = '<option value="">Error cargando pensiones</option>';
-    });
+  // 1. Cargar solo la pensión más reciente con datos de estudiante anidados vía fetch extra
+  async function loadRecentPension() {
+    try {
+      const resP = await fetch(
+        'https://proyecto01-git-main-johan-vilca-flores-projects.vercel.app/api/pensions/?_=' + Date.now(),
+        { cache: 'no-store' }
+      );
+      if (!resP.ok) throw resP;
+      const dataP = await resP.json();
 
-  // 2. Envío del formulario
+      // Ordenar por id desc y quedarnos con la más reciente
+      const [recent] = dataP.results
+        .sort((a, b) => b.id - a.id)
+        .slice(0, 1);
+
+      pensionSelect.innerHTML = '<option value="">--Selecciona una pensión--</option>';
+
+      // Fetch extra para obtener la inscripción completa
+      const resI = await fetch(
+        `https://proyecto01-git-main-johan-vilca-flores-projects.vercel.app/api/inscriptions/${recent.inscription}/`,
+        { cache: 'no-store' }
+      );
+      if (!resI.ok) throw resI;
+      const insData = await resI.json();
+
+      const student   = insData.student || {};
+      const nombre    = student.first_name   || student.names            || 'Sin nombre';
+      const paterno   = student.last_name    || student.father_surname   || '';
+      const estudiante= `${nombre} ${paterno}`.trim();
+
+      const opt = document.createElement('option');
+      opt.value       = recent.id;
+      opt.textContent = `${estudiante} — S/ ${recent.monto}`;
+      pensionSelect.appendChild(opt);
+
+    } catch (err) {
+      console.error('Error al cargar la pensión reciente:', err);
+      pensionSelect.innerHTML = '<option value="">Error cargando pensión</option>';
+    }
+  }
+
+  loadRecentPension();
+
+  // 2. Envío del formulario de pago
   form.addEventListener('submit', async e => {
     e.preventDefault();
     messageDiv.textContent = '';
@@ -62,10 +86,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     try {
       const res = await fetch(
-        'https://proyecto01-git-main-johan-vilca-flores-projects.vercel.app/api/cashbox-entries/',
+        'https://proyecto01-git-main-johan-vilca-flores-projects.vercel.app/api/cashboxentries/',
         {
-          method:  'POST',
-          body:    formData
+          method: 'POST',
+          body:   formData
         }
       );
       const body = await res.json();
@@ -75,15 +99,13 @@ document.addEventListener('DOMContentLoaded', () => {
       messageDiv.textContent = 'Pago registrado con éxito.';
       messageDiv.style.color = 'green';
       form.reset();
-      setTimeout(() => {
-        window.location.href = '/thanks.html';
-      }, 1000);
 
     } catch (err) {
       console.error('Error al registrar pago:', err);
-      messageDiv.textContent = err.detail 
-                            || JSON.stringify(err) 
-                            || 'Error al registrar el pago.';
+      messageDiv.textContent = 
+        err.detail 
+        || JSON.stringify(err) 
+        || 'Error al registrar el pago.';
       messageDiv.style.color = 'red';
     }
   });
