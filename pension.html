@@ -1,39 +1,41 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulario de Pensión</title>
-    <link rel="stylesheet" href="styles1.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formulario de Pensión</title>
+  <link rel="stylesheet" href="styles1.css">
+  <script src="pension.js" defer></script>
 </head>
 <body>
-    <div class="form-container">
-        <h1>Formulario de Pensión</h1>
+  <div class="form-container">
+    <h1>Formulario de Pensión</h1>
 
-        <form id="pension-form">
-            <!-- Selección de Inscripción -->
-            <label for="inscription">Seleccionar Inscripción:</label>
-            <select id="inscription" name="inscription" required>
-                <!-- Las inscripciones se llenarán aquí -->
-            </select><br>
+    <form id="pension-form">
+      <!-- Selección de Inscripción -->
+      <label for="inscription">Seleccionar Inscripción:</label>
+      <select id="inscription" name="inscription" required>
+        <option value="">– Cargando inscripciones… –</option>
+      </select><br>
 
-            <!-- Monto -->
-            <label for="monto">Monto:</label>
-            <input type="number" id="monto" name="monto" required><br>
+      <!-- Monto -->
+      <label for="monto">Monto:</label>
+      <input type="number" id="monto" name="monto" required><br>
 
-            <!-- Estado de pago -->
-            <label for="estado-pago">Estado de Pago:</label>
-            <input type="checkbox" id="estado-pago" name="estado_pago" value="true"><br>
+      <!-- Estado de pago -->
+      <label for="estado-pago">Estado de Pago:</label>
+      <input type="checkbox" id="estado-pago" name="estado_pago" value="true"><br>
 
-            <!-- Fecha de pago -->
-            <label for="fecha-pago">Fecha de Pago:</label>
-            <input type="date" id="fecha-pago" name="fecha_pago" required><br>
+      <!-- Fecha de pago -->
+      <label for="fecha-pago">Fecha de Pago:</label>
+      <input type="date" id="fecha-pago" name="fecha_pago" required><br>
 
-            <!-- Botón de Envío -->
-            <button type="submit">Registrar Pensión</button>
-        </form>
-    </div>
+      <!-- Botón de Envío -->
+      <button type="submit">Registrar Pensión</button>
+    </form>
 
-    <script src="pension.js" defer></script>
+    <!-- ← Este div es imprescindible: -->
+    <div id="message"></div>
+  </div>
 </body>
 </html>
