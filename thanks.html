@@ -1,18 +1,27 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gracias por tu Pago</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gracias por tu Pago</title>
+  <link rel="stylesheet" href="gracias.css">
 </head>
 <body>
+
+  <div class="container">
+    <img src="logo.jpg" alt="Logo Colegio Palmer" class="logo">
     <h1>¡Gracias por tu Pago!</h1>
-    <p>El pago ha sido registrado exitosamente. ¡Gracias por tu colaboración!</p>
-    <p>Te redirigiremos al inicio en breve.</p>
-    <script>
-        setTimeout(function() {
-            window.location.href = 'https://www.tiktok.com/@colegio.palmer/video/7454285619758484741?is_from_webapp=1&sender_device=pc&web_id=7526673901020431877';  // Redirigir al usuario para cerrar sesión (ajustar la URL de cierre de sesión)
-        }, 5000);  // Esperar 5 segundos antes de redirigir
-    </script>
+    <p>El pago ha sido registrado exitosamente. <br> ¡Gracias por tu colaboración!</p>
+    <p class="small">Serás redirigido a un video bonito !!</p>
+
+    <a href="https://www.tiktok.com/@colegio.palmer/video/7454285619758484741?is_from_webapp=1&sender_device=pc&web_id=7526673901020431877" class="btn-regresar">Ir ahora</a>
+  </div>
+
+  <script>
+    setTimeout(function() {
+      window.location.href = 'https://www.tiktok.com/@colegio.palmer/video/7454285619758484741?is_from_webapp=1&sender_device=pc&web_id=7526673901020431877';
+    }, 5000); // Redirige en 5 segundos
+  </script>
+
 </body>
 </html>
