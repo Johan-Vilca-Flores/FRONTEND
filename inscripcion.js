@@ -1,12 +1,19 @@
+console.log('inscripcion.js cargado');
+
 document.addEventListener('DOMContentLoaded', () => {
   const form          = document.getElementById('inscripcion-form');
   const studentSelect = document.getElementById('student');
   const degreeSelect  = document.getElementById('degree');
   const messageDiv    = document.getElementById('message');
 
-  // 1) Cargar estudiantes
+  if (!messageDiv) {
+    console.error('No existe el <div id="message"> en el HTML');
+    return;
+  }
+
+  // Carga estudiantes
   fetch('https://proyecto01-git-main-johan-vilca-flores-projects.vercel.app/api/students/')
-    .then(r => r.ok ? r.json() : Promise.reject(r))
+    .then(r => r.json())
     .then(data => {
       studentSelect.innerHTML = '<option value="">--Selecciona un estudiante--</option>';
       data.results.forEach(s => {
@@ -19,13 +26,13 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     })
     .catch(err => {
-      console.error('Error al cargar estudiantes:', err);
-      studentSelect.innerHTML = '<option value="">Error cargando estudiantes</option>';
+      console.error('Error cargando estudiantes:', err);
+      studentSelect.innerHTML = '<option value="">Error al cargar</option>';
     });
 
-  // 2) Cargar grados
+  // Carga grados
   fetch('https://proyecto01-git-main-johan-vilca-flores-projects.vercel.app/api/degrees/')
-    .then(r => r.ok ? r.json() : Promise.reject(r))
+    .then(r => r.json())
     .then(data => {
       degreeSelect.innerHTML = '<option value="">--Selecciona un grado--</option>';
       data.results.forEach(d => {
@@ -36,24 +43,24 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     })
     .catch(err => {
-      console.error('Error al cargar grados:', err);
-      degreeSelect.innerHTML = '<option value="">Error cargando grados</option>';
+      console.error('Error cargando grados:', err);
+      degreeSelect.innerHTML = '<option value="">Error al cargar</option>';
     });
 
-  // 3) Manejar envío
+  // Maneja el envío
   form.addEventListener('submit', async e => {
     e.preventDefault();
     messageDiv.textContent = '';
 
-    const studentId = Number(studentSelect.value);
-    const degreeId  = Number(degreeSelect.value);
-    if (!studentId || !degreeId) {
+    const sid = Number(studentSelect.value);
+    const did = Number(degreeSelect.value);
+    if (!sid || !did) {
       messageDiv.textContent = 'Selecciona estudiante y grado.';
       messageDiv.style.color = 'red';
       return;
     }
 
-    const payload = { student_id: studentId, degree_id: degreeId };
+    const payload = { student_id: sid, degree_id: did };
     console.log('Enviando payload:', payload);
 
     try {
@@ -73,9 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     } catch(err) {
       console.error('Error al crear inscripción:', err);
-      messageDiv.textContent = err.detail 
-        || JSON.stringify(err) 
-        || 'Error desconocido';
+      messageDiv.textContent = err.detail || JSON.stringify(err) || 'Error desconocido';
       messageDiv.style.color = 'red';
     }
   });
