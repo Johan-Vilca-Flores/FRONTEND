@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     try {
       const res = await fetch(
-        'https://proyecto01-git-main-johan-vilca-flores-projects.vercel.app/api/cashboxentries/',
+        'https://proyecto01-git-main-johan-vilca-flores-projects.vercel.app/api/cashbox-entries/',
         {
           method: 'POST',
           body:   formData
