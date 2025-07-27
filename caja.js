@@ -1,51 +1,87 @@
-// Función para cargar las pensiones desde la API
-fetch('https://proyecto01-git-main-johan-vilca-flores-projects.vercel.app/api/pensions/')  // URL de la API de pensiones
-    .then(response => response.json())
+console.log('caja.js cargado');
+
+document.addEventListener('DOMContentLoaded', () => {
+  console.log('DOMContentLoaded OK');
+
+  const pensionSelect   = document.getElementById('pension');
+  const form            = document.getElementById('payment-form');
+  const messageDiv      = document.getElementById('message');
+
+  if (!messageDiv) {
+    console.error('Falta <div id="message"> en el HTML');
+    return;
+  }
+
+  // 1. Cargar pensiones (solo las registradas)
+  fetch('https://proyecto01-git-main-johan-vilca-flores-projects.vercel.app/api/pensions/')
+    .then(res => res.ok ? res.json() : Promise.reject(res))
     .then(data => {
-        const pensionSelect = document.getElementById('pension');
-
-        // Llenar el selector de pensiones con las pensiones disponibles
-        data.forEach(pension => {
-            const option = document.createElement('option');
-            option.value = pension.id;
-            option.textContent = `Pensión ${pension.id} - Monto: ${pension.monto}`;
-            pensionSelect.appendChild(option);
-        });
+      pensionSelect.innerHTML = '<option value="">--Selecciona una pensión--</option>';
+      data.results.forEach(p => {
+        const opt = document.createElement('option');
+        opt.value = p.id;
+        // Mostrar estudiante y monto, por ejemplo:
+        const estudiante = p.inscription && p.inscription.student
+                          ? `${p.inscription.student.first_name || p.inscription.student.names} ${p.inscription.student.last_name || p.inscription.student.father_surname}`
+                          : `Pensión #${p.id}`;
+        opt.textContent = `${estudiante} — S/ ${p.monto}`;
+        pensionSelect.appendChild(opt);
+      });
     })
-    .catch(error => console.error('Error al cargar las pensiones:', error));
-
-// Manejar el envío del formulario
-document.getElementById('payment-form').addEventListener('submit', function(event) {
-    event.preventDefault();  // Prevenir el comportamiento por defecto del formulario
-
-    const pensionId = document.getElementById('pension').value;
-    const paymentMethod = document.getElementById('payment-method').value;
-    const amount = document.getElementById('amount').value;
-    const receiptImage = document.getElementById('receipt-image').files[0];  // Obtener el archivo de imagen
-    const notes = document.getElementById('notes').value;
-
-    const paymentData = new FormData();
-    paymentData.append('pension', pensionId);
-    paymentData.append('payment_method', paymentMethod);
-    paymentData.append('amount', amount);
-    paymentData.append('receipt_image', receiptImage);
-    paymentData.append('notes', notes);
-
-    // Enviar los datos del pago a la API
-    fetch('https://proyecto01-git-main-johan-vilca-flores-projects.vercel.app/api/cashbox/', {  // URL de la API de CashBox
-        method: 'POST',
-        body: paymentData
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Pago registrado:', data);
-        alert('¡Pago registrado exitosamente!');
-
-        // Redirigir a la página de "Gracias" o cierre de sesión
-        window.location.href = 'thanks.html';  // Redirigir a una página de agradecimiento o cierre de sesión
-    })
-    .catch(error => {
-        console.error('Error al registrar el pago:', error);
-        alert('Hubo un error al realizar el pago.');
+    .catch(err => {
+      console.error('Error al cargar pensiones:', err);
+      pensionSelect.innerHTML = '<option value="">Error cargando pensiones</option>';
     });
+
+  // 2. Envío del formulario
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    messageDiv.textContent = '';
+
+    const pensionId    = pensionSelect.value;
+    const method       = document.getElementById('payment-method').value;
+    const amount       = document.getElementById('amount').value;
+    const receiptInput = document.getElementById('receipt-image');
+    const notes        = document.getElementById('notes').value;
+
+    if (!pensionId || !method || !amount) {
+      messageDiv.textContent = 'Completa todos los campos obligatorios.';
+      messageDiv.style.color = 'red';
+      return;
+    }
+
+    // Construir FormData para multipart/form-data
+    const formData = new FormData();
+    formData.append('pension', pensionId);
+    formData.append('payment_method', method);
+    formData.append('amount', amount);
+    if (receiptInput.files.length > 0) {
+      formData.append('receipt_image', receiptInput.files[0]);
+    }
+    formData.append('notes', notes);
+
+    try {
+      const res = await fetch(
+        'https://proyecto01-git-main-johan-vilca-flores-projects.vercel.app/api/cashboxentries/',
+        {
+          method:  'POST',
+          body:    formData
+        }
+      );
+      const body = await res.json();
+      if (!res.ok) throw body;
+
+      console.log('Pago registrado en caja:', body);
+      messageDiv.textContent = 'Pago registrado con éxito.';
+      messageDiv.style.color = 'green';
+      form.reset();
+
+    } catch (err) {
+      console.error('Error al registrar pago:', err);
+      messageDiv.textContent = err.detail 
+                            || JSON.stringify(err) 
+                            || 'Error al registrar el pago.';
+      messageDiv.style.color = 'red';
+    }
+  });
 });
